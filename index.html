@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Red Crescent Birthday Frame</title>
+  <title>RCYGSSC HBD Photo Frame</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎉 Red Crescent Birthday Frame 🎉</h1>
+  <div class="container">
+    <h1>RCYGSSC HBD Photo Frame</h1>
+    <p>আপনার জন্মদিনের ছবি আপলোড করুন এবং ফ্রেম সহ ডাউনলোড করুন।</p>
 
-  <div class="input-section">
-    <input type="text" id="name" placeholder="Enter your name"><br><br>
-    <input type="date" id="dob"><br><br>
-    <input type="file" id="photo" accept="image/*"><br><br>
-    <button onclick="generateFrame()">Generate Frame</button>
+    <input type="file" id="upload" accept="image/*">
+    <div class="frame-container">
+      <canvas id="canvas"></canvas>
+    </div>
+    <button id="downloadBtn">ডাউনলোড করুন</button>
   </div>
-
-  <canvas id="canvas" width="600" height="600"></canvas><br>
-  <a id="download" download="birthday-frame.png">Download Image</a>
 
   <script src="script.js"></script>
 </body>
