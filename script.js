@@ -1,43 +1,39 @@
-async function generateFrame() {
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+const upload = document.getElementById('upload');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const downloadBtn = document.getElementById('downloadBtn');
 
-  const name = document.getElementById('name').value;
-  const dob = document.getElementById('dob').value;
-  const photoFile = document.getElementById('photo').files[0];
+const frame = new Image();
+frame.src = 'frame.png'; // এখানে রাখবে তোমার রেড ক্রিসেন্ট HBD ফ্রেম PNG
 
-  if (!name || !dob || !photoFile) {
-    alert("Please fill all fields and upload a photo!");
-    return;
-  }
+upload.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-  // Load user's photo
-  const photoURL = URL.createObjectURL(photoFile);
-  const photo = await loadImage(photoURL);
-
-  // Draw photo as background
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(photo, 0, 0, canvas.width, canvas.height);
-
-  // Load frame overlay
-  const frame = await loadImage('frames/birthday-frame.png');
-  ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
-
-  // Add text (name + DOB)
-  ctx.fillStyle = "white";
-  ctx.font = "30px Arial";
-  ctx.fillText(name, 50, 550);
-  ctx.fillText(dob, 400, 550);
-
-  // Make downloadable
-  document.getElementById('download').href = canvas.toDataURL();
-}
-
-// Helper to load images
-function loadImage(src) {
-  return new Promise((resolve) => {
+  const reader = new FileReader();
+  reader.onload = function(event) {
     const img = new Image();
-    img.onload = () => resolve(img);
-    img.src = src;
-  });
-}
+    img.onload = function() {
+      // Canvas সেট করা
+      canvas.width = img.width > 800 ? 800 : img.width;
+      const scale = canvas.width / img.width;
+      canvas.height = img.height * scale;
+
+      // ছবি আঁকা
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // ফ্রেম overlay
+      ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+    }
+    img.src = event.target.result;
+  }
+  reader.readAsDataURL(file);
+});
+
+downloadBtn.addEventListener('click', function() {
+  const link = document.createElement('a');
+  link.download = 'RCYGSSC-HBD.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
